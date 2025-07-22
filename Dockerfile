@@ -25,10 +25,12 @@ COPY --from=prometheus /bin/prometheus /bin/prometheus
 COPY --from=prometheus /usr/share/prometheus /usr/share/prometheus
 COPY prometheus/prometheus.yml /etc/prometheus/prometheus.yml.tpl
 COPY prometheus/prometheus.target.yml.tpl /etc/prometheus/prometheus.target.yml.tpl
+COPY prometheus/prometheus.vllm.target.yml.tpl /etc/prometheus/prometheus.vllm.target.yml.tpl
 
 COPY grafana/datasource.yml /etc/grafana/provisioning/datasources/prometheus.yml
 COPY grafana/dashboard.yml /etc/grafana/provisioning/dashboards/dashboard.yml
 COPY grafana/dashboard.json /var/lib/grafana/dashboards/dashboard.json
+COPY grafana/vlm-dashboard.json /var/lib/grafana/dashboards/vlm-dashboard.json
 
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 

@@ -25,7 +25,7 @@ providers:
 
   - name: 'VLLM'
     orgId: 1
-    folder: 'VLLM'
+    folder: ''
     type: file
     disableDeletion: true
     updateIntervalSeconds: 60
