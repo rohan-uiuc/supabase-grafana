@@ -4,26 +4,6 @@ set -e
 
 cp /etc/prometheus/prometheus.yml.tpl /etc/prometheus/prometheus.yml
 
-# Add vLLM server monitoring if configured
-echo "Checking vLLM configuration: VLM_SERVER_URL='$VLM_SERVER_URL'"
-if [ -n "$VLM_SERVER_URL" ] && [ "$VLM_SERVER_URL" != "" ]; then
-  echo "Setting up vLLM server monitoring for $VLM_SERVER_URL"
-  
-  # Extract host from URL (remove protocol)
-  VLLM_HOST=$(echo "$VLM_SERVER_URL" | sed 's|^https\?://||' | sed 's|/.*||')
-  echo "Extracted vLLM host: $VLLM_HOST"
-  
-  if [ -f /etc/prometheus/prometheus.vllm.target.yml.tpl ]; then
-    cat /etc/prometheus/prometheus.vllm.target.yml.tpl >> /etc/prometheus/prometheus.yml
-    sed -i "s/__VLLM_SERVER_HOST__/$VLLM_HOST/g" /etc/prometheus/prometheus.yml
-    echo "vLLM target added to Prometheus configuration"
-  else
-    echo "ERROR: vLLM template file not found"
-  fi
-else
-  echo "vLLM monitoring not configured - VLM_SERVER_URL is empty"
-fi
-
 if [ -z "$SUPABASE_ACCESS_TOKEN" ]; then
   echo "Setting up single-project monitoring."
 
@@ -72,6 +52,26 @@ else
     sed -i "s/__SUPABASE_PROJECT_REF__/$PROJECT_REF/g" /etc/prometheus/prometheus.yml
     sed -i "s/__SUPABASE_SERVICE_ROLE_KEY__/$SERVICE_ROLE_KEY/g" /etc/prometheus/prometheus.yml
   done
+fi
+
+# Add vLLM server monitoring if configured (after Supabase setup)
+echo "Checking vLLM configuration: VLM_SERVER_URL='$VLM_SERVER_URL'"
+if [ -n "$VLM_SERVER_URL" ] && [ "$VLM_SERVER_URL" != "" ]; then
+  echo "Setting up vLLM server monitoring for $VLM_SERVER_URL"
+  
+  # Extract host from URL (remove protocol)
+  VLLM_HOST=$(echo "$VLM_SERVER_URL" | sed 's|^https\?://||' | sed 's|/.*||')
+  echo "Extracted vLLM host: $VLLM_HOST"
+  
+  if [ -f /etc/prometheus/prometheus.vllm.target.yml.tpl ]; then
+    cat /etc/prometheus/prometheus.vllm.target.yml.tpl >> /etc/prometheus/prometheus.yml
+    sed -i "s/__VLLM_SERVER_HOST__/$VLLM_HOST/g" /etc/prometheus/prometheus.yml
+    echo "vLLM target added to Prometheus configuration"
+  else
+    echo "ERROR: vLLM template file not found"
+  fi
+else
+  echo "vLLM monitoring not configured - VLM_SERVER_URL is empty"
 fi
 
 mkdir -p /data/grafana/data 
