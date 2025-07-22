@@ -950,7 +950,7 @@
   },
   "timepicker": {},
   "timezone": "",
-  "title": "vLLM Server Dashboard (Qwen2.5-VL-72B)",
+  "title": "vLLM Server Dashboard",
   "uid": "vllm-server",
   "version": 1,
   "weekStart": ""
