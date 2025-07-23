@@ -1189,10 +1189,10 @@
           "calcs": [
             "lastNotNull"
           ],
-          "fields": "/^model_name$/",
+          "fields": "",
           "values": false
         },
-        "textMode": "value",
+        "textMode": "name",
         "wideLayout": true
       },
       "pluginVersion": "9.4.7",
@@ -1202,9 +1202,9 @@
                "type": "prometheus",
                "uid": "prometheus"
              },
-             "expr": "label_replace(vllm:num_requests_running{job=\"vllm-server\"}, \"display_model\", \"$2\", \"model_name\", \"(.*/)?(.+)\")",
+             "expr": "vllm:num_requests_running{job=\"vllm-server\"}",
              "interval": "",
-             "legendFormat": "{{display_model}}",
+             "legendFormat": "{{model_name}}",
              "refId": "A"
            }
          ],
