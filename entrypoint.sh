@@ -55,12 +55,12 @@ else
 fi
 
 # Add vLLM server monitoring if configured (after Supabase setup)
-echo "Checking vLLM configuration: VLM_SERVER_URL='$VLM_SERVER_URL'"
-if [ -n "$VLM_SERVER_URL" ] && [ "$VLM_SERVER_URL" != "" ]; then
-  echo "Setting up vLLM server monitoring for $VLM_SERVER_URL"
+echo "Checking vLLM configuration: VLLM_SERVER_URL='$VLLM_SERVER_URL'"
+if [ -n "$VLLM_SERVER_URL" ] && [ "$VLLM_SERVER_URL" != "" ]; then
+  echo "Setting up vLLM server monitoring for $VLLM_SERVER_URL"
   
   # Extract host from URL (remove protocol)
-  VLLM_HOST=$(echo "$VLM_SERVER_URL" | sed 's|^https\?://||' | sed 's|/.*||')
+  VLLM_HOST=$(echo "$VLLM_SERVER_URL" | sed 's|^https\?://||' | sed 's|/.*||')
   echo "Extracted vLLM host: $VLLM_HOST"
   
   if [ -f /etc/prometheus/prometheus.vllm.target.yml.tpl ]; then
@@ -71,7 +71,7 @@ if [ -n "$VLM_SERVER_URL" ] && [ "$VLM_SERVER_URL" != "" ]; then
     echo "ERROR: vLLM template file not found"
   fi
 else
-  echo "vLLM monitoring not configured - VLM_SERVER_URL is empty"
+  echo "vLLM monitoring not configured - VLLM_SERVER_URL is empty"
 fi
 
 mkdir -p /data/grafana/data 
