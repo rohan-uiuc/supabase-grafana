@@ -2392,7 +2392,7 @@
             "type": "prometheus",
             "uid": "prometheus"
           },
-          "expr": "min_over_time((sum by (model_name) (rate(vllm:prompt_tokens_total{job=\"vllm-server\"}[$__rate_interval])))[5s:])",
+          "expr": "min_over_time((sum by (model_name) (rate(vllm:prompt_tokens_total{job=\"vllm-server\"}[$__rate_interval])))[1m])",
           "interval": "",
           "legendFormat": "{{model_name}} prompt min",
           "refId": "A"
@@ -2402,7 +2402,7 @@
             "type": "prometheus",
             "uid": "prometheus"
           },
-          "expr": "avg_over_time((sum by (model_name) (rate(vllm:prompt_tokens_total{job=\"vllm-server\"}[$__rate_interval])))[5s:])",
+          "expr": "avg_over_time((sum by (model_name) (rate(vllm:prompt_tokens_total{job=\"vllm-server\"}[$__rate_interval])))[1m])",
           "interval": "",
           "legendFormat": "{{model_name}} prompt avg",
           "refId": "B"
@@ -2412,7 +2412,7 @@
             "type": "prometheus",
             "uid": "prometheus"
           },
-          "expr": "max_over_time((sum by (model_name) (rate(vllm:prompt_tokens_total{job=\"vllm-server\"}[$__rate_interval])))[5s:])",
+          "expr": "max_over_time((sum by (model_name) (rate(vllm:prompt_tokens_total{job=\"vllm-server\"}[$__rate_interval])))[1m])",
           "interval": "",
           "legendFormat": "{{model_name}} prompt max",
           "refId": "C"
@@ -2422,7 +2422,7 @@
             "type": "prometheus",
             "uid": "prometheus"
           },
-          "expr": "min_over_time((sum by (model_name) (rate(vllm:generation_tokens_total{job=\"vllm-server\"}[$__rate_interval])))[5s:])",
+          "expr": "min_over_time((sum by (model_name) (rate(vllm:generation_tokens_total{job=\"vllm-server\"}[$__rate_interval])))[1m])",
           "interval": "",
           "legendFormat": "{{model_name}} generation min",
           "refId": "D"
@@ -2432,7 +2432,7 @@
             "type": "prometheus",
             "uid": "prometheus"
           },
-          "expr": "avg_over_time((sum by (model_name) (rate(vllm:generation_tokens_total{job=\"vllm-server\"}[$__rate_interval])))[5s:])",
+          "expr": "avg_over_time((sum by (model_name) (rate(vllm:generation_tokens_total{job=\"vllm-server\"}[$__rate_interval])))[1m])",
           "interval": "",
           "legendFormat": "{{model_name}} generation avg",
           "refId": "E"
@@ -2442,7 +2442,7 @@
             "type": "prometheus",
             "uid": "prometheus"
           },
-          "expr": "max_over_time((sum by (model_name) (rate(vllm:generation_tokens_total{job=\"vllm-server\"}[$__rate_interval])))[5s:])",
+          "expr": "max_over_time((sum by (model_name) (rate(vllm:generation_tokens_total{job=\"vllm-server\"}[$__rate_interval])))[1m])",
           "interval": "",
           "legendFormat": "{{model_name}} generation max",
           "refId": "F"
