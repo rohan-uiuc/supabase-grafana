@@ -1665,54 +1665,51 @@
       },
       "id": 19,
       "options": {
-        "colorMode": "value",
-        "graphMode": "area",
-        "justifyMode": "center",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
         },
-        "textMode": "auto"
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
       },
       "pluginVersion": "9.4.7",
-               "targets": [
-           {
-             "datasource": {
-               "type": "prometheus",
-               "uid": "prometheus"
-             },
-             "expr": "histogram_quantile(0.95, increase(vllm:e2e_request_latency_seconds_bucket{job=\"vllm-server\"}[$__range]))",
-             "interval": "",
-             "legendFormat": "95th Percentile",
-             "refId": "A"
-           },
-           {
-             "datasource": {
-               "type": "prometheus",
-               "uid": "prometheus"
-             },
-             "expr": "increase(vllm:e2e_request_latency_seconds_sum{job=\"vllm-server\"}[$__range]) / increase(vllm:e2e_request_latency_seconds_count{job=\"vllm-server\"}[$__range])",
-             "interval": "",
-             "legendFormat": "Average",
-             "refId": "B"
-           },
-           {
-             "datasource": {
-               "type": "prometheus",
-               "uid": "prometheus"
-             },
-             "expr": "histogram_quantile(0.01, increase(vllm:e2e_request_latency_seconds_bucket{job=\"vllm-server\"}[$__range]))",
-             "interval": "",
-             "legendFormat": "Min (approx p1)",
-             "refId": "C"
-           }
-         ],
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "histogram_quantile(0.01, sum by (le, model_name) (rate(vllm:e2e_request_latency_seconds_bucket{job=\"vllm-server\"}[$__rate_interval])))",
+          "interval": "",
+          "legendFormat": "p01 (min)",
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "(sum by (model_name) (rate(vllm:e2e_request_latency_seconds_sum{job=\"vllm-server\"}[$__rate_interval])) / sum by (model_name) (rate(vllm:e2e_request_latency_seconds_count{job=\"vllm-server\"}[$__rate_interval])))",
+          "interval": "",
+          "legendFormat": "avg",
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "histogram_quantile(0.95, sum by (le, model_name) (rate(vllm:e2e_request_latency_seconds_bucket{job=\"vllm-server\"}[$__rate_interval])))",
+          "interval": "",
+          "legendFormat": "p95",
+          "refId": "C"
+        }
+      ],
       "title": "Response Time (Total)",
-      "type": "stat"
+      "type": "timeseries"
     },
     {
       "collapsed": false,
@@ -2059,7 +2056,7 @@
             "type": "prometheus",
             "uid": "prometheus"
           },
-          "expr": "increase(vllm:request_success_total{job=\"vllm-server\"}[$__range]) / ($__range_s)",
+          "expr": "sum by (finished_reason) (rate(vllm:request_success_total{job=\"vllm-server\"}[$__rate_interval]))",
           "interval": "",
           "legendFormat": "{{finished_reason}} completions/sec",
           "refId": "A"
