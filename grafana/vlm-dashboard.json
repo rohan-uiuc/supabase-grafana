@@ -1349,9 +1349,9 @@
             "type": "prometheus",
             "uid": "prometheus"
           },
-          "expr": "min_over_time((sum by (model_name) (rate(vllm:prompt_tokens_total{job=\"vllm-server\"}[$__rate_interval])))[5m])",
+          "expr": "1 / histogram_quantile(0.99, sum by (le, model_name) (rate(vllm:time_per_output_token_seconds_bucket{job=\"vllm-server\"}[$__rate_interval])))",
           "interval": "",
-          "legendFormat": "{{model_name}} prompt min",
+          "legendFormat": "{{model_name}} per-request throughput min",
           "refId": "A"
         },
         {
@@ -1359,9 +1359,9 @@
             "type": "prometheus",
             "uid": "prometheus"
           },
-          "expr": "avg_over_time((sum by (model_name) (rate(vllm:prompt_tokens_total{job=\"vllm-server\"}[$__rate_interval])))[5m])",
+          "expr": "sum by (model_name) (rate(vllm:time_per_output_token_seconds_count{job=\"vllm-server\"}[$__rate_interval])) / sum by (model_name) (rate(vllm:time_per_output_token_seconds_sum{job=\"vllm-server\"}[$__rate_interval]))",
           "interval": "",
-          "legendFormat": "{{model_name}} prompt avg",
+          "legendFormat": "{{model_name}} per-request throughput avg",
           "refId": "B"
         },
         {
@@ -1369,40 +1369,10 @@
             "type": "prometheus",
             "uid": "prometheus"
           },
-          "expr": "max_over_time((sum by (model_name) (rate(vllm:prompt_tokens_total{job=\"vllm-server\"}[$__rate_interval])))[5m])",
+          "expr": "1 / histogram_quantile(0.01, sum by (le, model_name) (rate(vllm:time_per_output_token_seconds_bucket{job=\"vllm-server\"}[$__rate_interval])))",
           "interval": "",
-          "legendFormat": "{{model_name}} prompt max",
+          "legendFormat": "{{model_name}} per-request throughput max",
           "refId": "C"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "prometheus"
-          },
-          "expr": "min_over_time((sum by (model_name) (rate(vllm:generation_tokens_total{job=\"vllm-server\"}[$__rate_interval])))[5m])",
-          "interval": "",
-          "legendFormat": "{{model_name}} generation min",
-          "refId": "D"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "prometheus"
-          },
-          "expr": "avg_over_time((sum by (model_name) (rate(vllm:generation_tokens_total{job=\"vllm-server\"}[$__rate_interval])))[5m])",
-          "interval": "",
-          "legendFormat": "{{model_name}} generation avg",
-          "refId": "E"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "prometheus"
-          },
-          "expr": "max_over_time((sum by (model_name) (rate(vllm:generation_tokens_total{job=\"vllm-server\"}[$__rate_interval])))[5m])",
-          "interval": "",
-          "legendFormat": "{{model_name}} generation max",
-          "refId": "F"
         }
       ],
       "title": "Token Throughput (min / avg / max)",
@@ -2340,6 +2310,145 @@
         }
       ],
       "title": "TTFT (min / avg / max)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "vis": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 84
+      },
+      "id": 35,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "min_over_time((sum by (model_name) (rate(vllm:prompt_tokens_total{job=\"vllm-server\"}[$__rate_interval])))[5s])",
+          "interval": "",
+          "legendFormat": "{{model_name}} prompt min",
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "avg_over_time((sum by (model_name) (rate(vllm:prompt_tokens_total{job=\"vllm-server\"}[$__rate_interval])))[5s])",
+          "interval": "",
+          "legendFormat": "{{model_name}} prompt avg",
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "max_over_time((sum by (model_name) (rate(vllm:prompt_tokens_total{job=\"vllm-server\"}[$__rate_interval])))[5s])",
+          "interval": "",
+          "legendFormat": "{{model_name}} prompt max",
+          "refId": "C"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "min_over_time((sum by (model_name) (rate(vllm:generation_tokens_total{job=\"vllm-server\"}[$__rate_interval])))[5s])",
+          "interval": "",
+          "legendFormat": "{{model_name}} generation min",
+          "refId": "D"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "avg_over_time((sum by (model_name) (rate(vllm:generation_tokens_total{job=\"vllm-server\"}[$__rate_interval])))[5s])",
+          "interval": "",
+          "legendFormat": "{{model_name}} generation avg",
+          "refId": "E"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "max_over_time((sum by (model_name) (rate(vllm:generation_tokens_total{job=\"vllm-server\"}[$__rate_interval])))[5s])",
+          "interval": "",
+          "legendFormat": "{{model_name}} generation max",
+          "refId": "F"
+        }
+      ],
+      "title": "Token Throughput (min / avg / max, 5s)",
       "type": "timeseries"
     }
   ],
