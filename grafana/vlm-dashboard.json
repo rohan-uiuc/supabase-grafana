@@ -2214,9 +2214,9 @@
             "type": "prometheus",
             "uid": "prometheus"
           },
-          "expr": "increase(vllm:generation_tokens_total{job=\"vllm-server\"}[$__range]) / ($__range_s)",
+          "expr": "sum by (model_name) (rate(vllm:generation_tokens_total{job=\"vllm-server\"}[$__rate_interval]))",
           "interval": "",
-          "legendFormat": "Generated tokens/sec",
+          "legendFormat": "{{model_name}} generated tokens/sec",
           "refId": "A"
         },
         {
@@ -2224,9 +2224,9 @@
             "type": "prometheus",
             "uid": "prometheus"
           },
-          "expr": "increase(vllm:prompt_tokens_total{job=\"vllm-server\"}[$__range]) / ($__range_s)",
+          "expr": "sum by (model_name) (rate(vllm:prompt_tokens_total{job=\"vllm-server\"}[$__rate_interval]))",
           "interval": "",
-          "legendFormat": "Prompt tokens/sec",
+          "legendFormat": "{{model_name}} prompt tokens/sec",
           "refId": "B"
         }
       ],
